@@ -23,7 +23,9 @@
 
 - **Flutter** (Frontend)
 - **Dart**
-- (Optional backend or local storage system if implemented)
+- **Python(Flask)**
+- **BeautifulSoup,requests(Web Scraping)**
+- **SharedPreferences**
 
 ---
 
