@@ -1,16 +1,38 @@
-# attendance
+# 📱 Bunkify
 
-A new Flutter project.
+**Bunkify** is a smart attendance companion app built with Flutter. It helps students track their attendance and calculate how many classes they can safely bunk without falling below a set attendance threshold. Designed with simplicity and utility in mind, Bunkify is a must-have tool for strategic bunkers.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Features
 
-A few resources to get you started if this is your first Flutter project:
+- 🎯 Set your target attendance percentage
+- 📊 View total attended, conducted, and bunkable classes
+- 🔄 Real-time calculation of how many classes you can skip
+- 💡 Clean UI with a student-friendly experience
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📸 Screenshots
+
+*Coming soon...*
+
+---
+
+## 🛠 Tech Stack
+
+- **Flutter** (Frontend)
+- **Dart**
+- **Python(Flask)**
+- **BeautifulSoup,requests(Web Scraping)**
+- **SharedPreferences**
+
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/yourusername/bunkify.git
+cd bunkify
+flutter pub get
+flutter run
