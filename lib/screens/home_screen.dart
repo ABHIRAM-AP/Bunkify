@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Scrollable content
           Padding(
             padding: EdgeInsets.only(
-              top: 100,
+              top: 65,
               bottom: MediaQuery.of(context).viewInsets.bottom + 70,
             ),
             child: SingleChildScrollView(

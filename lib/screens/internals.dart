@@ -62,7 +62,7 @@ class _InternalsPageState extends State<InternalsPage> {
           // Main content area with cards, scrollable
           Padding(
             padding: EdgeInsets.only(
-              top: 100,
+              top: 40,
               bottom: MediaQuery.of(context).viewInsets.bottom + 70,
             ),
             child: SingleChildScrollView(
