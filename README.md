@@ -29,10 +29,4 @@
 
 ---
 
-## 📦 Installation
 
-```bash
-git clone https://github.com/yourusername/bunkify.git
-cd bunkify
-flutter pub get
-flutter run
