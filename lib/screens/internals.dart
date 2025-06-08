@@ -30,6 +30,7 @@ class _InternalsPageState extends State<InternalsPage> {
       extendBodyBehindAppBar: true,
       extendBody: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'BUNK MATE',
           style: GoogleFonts.poppins(

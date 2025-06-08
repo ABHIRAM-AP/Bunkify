@@ -1,6 +1,8 @@
 import 'package:attendance/screens/home_screen.dart';
 import 'package:attendance/screens/internals.dart';
+import 'package:attendance/screens/login_screen_normal.dart';
 import 'package:flutter/material.dart';
+import 'package:attendance/services/auth_services.dart';
 
 class UtilTab extends StatelessWidget {
   final List<dynamic> internals;
@@ -50,6 +52,27 @@ class UtilTab extends StatelessWidget {
             },
             icon: Icon(
               Icons.assignment_turned_in_rounded,
+              color: Colors.white,
+              size: 36,
+            ),
+          ),
+          const SizedBox(
+            width: 70,
+          ),
+          IconButton(
+            onPressed: () async {
+              await AuthServices.logout();
+
+              Future.delayed(Duration.zero, () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (route) => false,
+                );
+              });
+            },
+            icon: const Icon(
+              Icons.logout_outlined,
               color: Colors.white,
               size: 36,
             ),

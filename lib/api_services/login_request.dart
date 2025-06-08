@@ -34,7 +34,7 @@ class APISERVICES {
     }
   }
 
-  /// Save credentials to SharedPreferences
+  // Save credentials to SharedPreferences
   static Future<void> saveCredentials(String userID, String password) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setBool('isLoggedIn', true);
@@ -42,21 +42,22 @@ class APISERVICES {
     await pref.setString('password', password);
   }
 
-  /// Retrieve stored credentials from SharedPreferences
-  // static Future<Map<String, String>?> getStoredCredentials() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   String? userID = pref.getString('userID');
-  //   String? password = pref.getString('password');
+  // Retrieve stored credentials from SharedPreferences
 
-  //   // Check if both credentials exist and return them as a map
-  //   if (userID != null && password != null) {
-  //     return {
-  //       'userID': userID,
-  //       'password': password,
-  //     };
-  //   } else {
-  //     debugPrint("Credentials not found.");
-  //     return null;
-  //   }
-  // }
+  static Future<Map<String, String>?> getStoredCredentials() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? userID = pref.getString('userID');
+    String? password = pref.getString('password');
+
+    // Check if both credentials exist and return them as a map
+    if (userID != null && password != null) {
+      return {
+        'userID': userID,
+        'password': password,
+      };
+    } else {
+      debugPrint("Credentials not found.");
+      return null;
+    }
+  }
 }

@@ -70,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'BUNK MATE',
           style: GoogleFonts.poppins(

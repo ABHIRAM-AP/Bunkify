@@ -1,13 +1,11 @@
-import 'dart:convert';
-import 'package:attendance/screens/home_screen.dart';
-import 'package:attendance/screens/loading_screen.dart';
-import 'package:attendance/widgets/etlab_id_textfield.dart';
-import 'package:attendance/widgets/password_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:attendance/services/auth_services.dart';
+import 'package:attendance/screens/home_screen.dart';
 
+import 'package:attendance/widgets/etlab_id_textfield.dart';
+import 'package:attendance/widgets/password_textfield.dart';
 import 'package:attendance/api_services/login_request.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,13 +17,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late final TextEditingController etlabidController;
   late final TextEditingController passwordController;
-  // bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     etlabidController = TextEditingController();
     passwordController = TextEditingController();
+    _checkSavedCredentials();
   }
 
   @override
@@ -33,6 +31,19 @@ class _LoginScreenState extends State<LoginScreen> {
     etlabidController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _checkSavedCredentials() async {
+    final savedCred = await APISERVICES.getStoredCredentials();
+    if (savedCred != null) {
+      final userID = savedCred['userID']!;
+      final password = savedCred['password']!;
+
+      // Delay navigation until after the first frame
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await loginAndNavigate(userID, password);
+      });
+    }
   }
 
   void showSnackBar(String message) {
@@ -45,12 +56,44 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> storeData(Map<String, dynamic> data) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> loginAndNavigate(String userID, String password) async {
+    final data = await APISERVICES.sendLoginRequest(userID, password);
 
-    // Convert JSON data to a string and store it
-    prefs.setString('attendanceData', jsonEncode(data['attendance']));
-    prefs.setString('internalMarks', jsonEncode(data['internal_marks']));
+    final attendance = data?['attendance'];
+    final headers = attendance?['headers'];
+    final rows = attendance?['data'];
+    final internals = data?['internal_marks'];
+
+    if (headers != null &&
+        headers.isNotEmpty &&
+        rows != null &&
+        rows.isNotEmpty) {
+      await APISERVICES.saveCredentials(userID, password);
+      debugPrint("Fetched Data: $data");
+
+      // Save data locally
+      await AuthServices.storeData(data!);
+
+      if (mounted) {
+        // Navigator.of(context).pop(); // Close loading screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(
+              attendanceData: attendance,
+              internals: internals ?? [],
+            ),
+          ),
+        );
+      }
+    } else {
+      if (mounted) Navigator.of(context).pop(); // Close loading screen
+      showSnackBar("Invalid Credentials");
+    }
+
+    debugPrint("Headers: $headers");
+    debugPrint("Rows: $rows");
+    debugPrint("Internals: $internals");
   }
 
   Future<void> loginUser() async {
@@ -61,44 +104,13 @@ class _LoginScreenState extends State<LoginScreen> {
       showSnackBar("ID and password cannot be empty.");
       return;
     }
-
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const LoadingScreen(),
+      builder: (_) => const Center(child: CircularProgressIndicator()),
     );
 
-    final data = await APISERVICES.sendLoginRequest(userID, password);
-    final attendance = data?['attendance'];
-    final headers = attendance?['headers'];
-    final rows = attendance?['data'];
-    final internals = data?['internal_marks'];
-
-    Navigator.of(context).pop();
-
-    debugPrint("Headers: $headers");
-    debugPrint("Rows: $rows");
-    debugPrint("Internals: $internals");
-
-    if (headers != null &&
-        headers.isNotEmpty &&
-        rows != null &&
-        rows.isNotEmpty) {
-      await APISERVICES.saveCredentials(userID, password);
-      debugPrint("Data is $data");
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(
-            attendanceData: attendance,
-            internals: internals ?? [],
-          ),
-        ),
-      );
-    } else {
-      showSnackBar("Invalid Credentials");
-    }
+    await loginAndNavigate(userID, password);
   }
 
   @override
@@ -109,9 +121,9 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           // Background image
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
-                image: const AssetImage('assets/image.png'),
+                image: AssetImage('assets/image.png'),
                 fit: BoxFit.fill,
               ),
             ),
@@ -122,35 +134,25 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "BUNKIFY",
-                        style: GoogleFonts.poppins(
-                          fontSize: 48,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    "BUNKIFY",
+                    style: GoogleFonts.poppins(
+                      fontSize: 48,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 85.0, bottom: 10),
-                        child: Text(
-                          "Hey There Let's have a Tea :)",
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: Colors.white70,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 20),
+                    child: Text(
+                      "Hey There Let's have a Tea :)",
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w300,
                       ),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.only(left: 40.0, bottom: 18),
                     child: Row(
@@ -171,15 +173,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   PasswordTextfield(passwordController: passwordController),
                   const SizedBox(height: 35),
                   ElevatedButton(
-                    onPressed: () {
-                      loginUser();
-                    },
+                    onPressed: loginUser,
                     style: ButtonStyle(
-                      elevation: WidgetStatePropertyAll(8),
-                      backgroundColor: WidgetStatePropertyAll(
-                        Color(0xFFBB6E68),
-                      ),
-                      padding: WidgetStatePropertyAll(
+                      elevation: const WidgetStatePropertyAll(8),
+                      backgroundColor:
+                          const WidgetStatePropertyAll(Color(0xFFBB6E68)),
+                      padding: const WidgetStatePropertyAll(
                         EdgeInsets.symmetric(horizontal: 80, vertical: 16),
                       ),
                     ),
