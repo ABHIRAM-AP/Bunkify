@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     print("Data of home ${widget.attendanceData}");
     parseAttendanceData();
-    print(attendanceDetails); // For ensuring whether setState() worked
+    print(attendanceDetails); // !! For ensuring whether setState() worked !!
   }
 
   final items = ['90', '80', '75'];
@@ -160,7 +160,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18),
                             ),
-                            child: SizedBox(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: const Color(0xFFBB6E68), width: 2),
+                              ),
                               height: 110,
                               child: ListTile(
                                 title: Padding(

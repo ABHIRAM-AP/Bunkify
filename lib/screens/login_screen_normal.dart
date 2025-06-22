@@ -1,3 +1,4 @@
+import 'package:attendance/widgets/login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:attendance/services/auth_services.dart';
@@ -120,89 +121,46 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           // Background image
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/image.png'),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-
+          _buildBackgroundImage(),
           Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  _buildText(
                     "BUNKIFY",
-                    style: GoogleFonts.poppins(
-                      fontSize: 48,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    48,
+                    Colors.white,
+                    FontWeight.w800,
+                    null,
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 20),
-                    child: Text(
+                    child: _buildText(
                       "Hey There Let's have a Tea :)",
-                      style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w300,
-                      ),
+                      13,
+                      Colors.white70,
+                      FontWeight.w300,
+                      null,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 40.0, bottom: 18),
                     child: Row(
                       children: [
-                        Text(
-                          "Login",
-                          style: GoogleFonts.poppins(
-                            fontSize: 23,
-                            letterSpacing: 1,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        _buildText(
+                            "Login", 23, Colors.white, FontWeight.w600, 1),
                       ],
                     ),
                   ),
-                  EtlabID(etlabidController: etlabidController),
-                  PasswordTextfield(passwordController: passwordController),
+                  EtlabID(
+                      etlabidController: etlabidController), //Etlab Textfield
+                  PasswordTextfield(
+                      passwordController:
+                          passwordController), // Password Textfield
                   const SizedBox(height: 35),
-                  ElevatedButton(
-                    onPressed: loginUser,
-                    style: ButtonStyle(
-                      elevation: const WidgetStatePropertyAll(8),
-                      backgroundColor:
-                          const WidgetStatePropertyAll(Color(0xFFBB6E68)),
-                      padding: const WidgetStatePropertyAll(
-                        EdgeInsets.symmetric(horizontal: 80, vertical: 16),
-                      ),
-                    ),
-                    child: Text(
-                      "Login",
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                    child: Text(
-                      "A perfect companion for you to bunk classes :)",
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 12.7,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
+                  LoginButton(loginUser: loginUser), // Login Button
                 ],
               ),
             ),
@@ -211,4 +169,28 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+Widget _buildText(String title, double? fontSize, Color? color,
+    FontWeight? fontWeight, double? letterSpacing) {
+  return Text(
+    title,
+    style: GoogleFonts.poppins(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: fontWeight,
+      letterSpacing: letterSpacing,
+    ),
+  );
+}
+
+Widget _buildBackgroundImage() {
+  return Container(
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/image.png'),
+        fit: BoxFit.fill,
+      ),
+    ),
+  );
 }
