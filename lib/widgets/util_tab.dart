@@ -1,19 +1,75 @@
 import 'dart:ui';
+import 'package:attendance/screens/developer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/screens/home_screen.dart';
-import 'package:attendance/screens/internals.dart';
 import 'package:attendance/screens/login_screen_normal.dart';
 import 'package:attendance/services/auth_services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UtilTab extends StatelessWidget {
-  final List<dynamic> internals;
   final Map<String, dynamic> attendanceDetails;
 
   const UtilTab({
     super.key,
-    required this.internals,
     required this.attendanceDetails,
   });
+  void _showAlertDialogForLogOut(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Container(
+        child: AlertDialog(
+          elevation: 10,
+          backgroundColor: const Color(0xFF2A2A2A),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(30),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          title: Text(
+            'Logout Confirmation',
+            style: GoogleFonts.poppins(fontSize: 20, color: Colors.white70),
+          ),
+          content: Text(
+            'Are you sure you want to log out?',
+            style: GoogleFonts.poppins(fontSize: 15, color: Colors.white70),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await AuthServices.logout();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+                );
+              },
+              child: Text(
+                "Yes",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.green,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "No",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.red,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,21 +78,19 @@ class UtilTab extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
         child: BackdropFilter(
-          filter: ImageFilter.blur(
-              sigmaX: 15, sigmaY: 15), // stronger blur for image background
+          filter: ImageFilter.blur(sigmaX: 1.2, sigmaY: 1.2),
           child: Container(
             height: 65,
             decoration: BoxDecoration(
-              color: Colors.white
-                  .withOpacity(0.1), // semi-transparent for glass effect
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
+                  color: Colors.black.withValues(alpha: 0.15),
                   blurRadius: 12,
                   offset: Offset(0, 6),
                 ),
@@ -54,20 +108,18 @@ class UtilTab extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => HomeScreen(
                           attendanceData: attendanceDetails,
-                          internals: internals,
                         ),
                       ),
                     );
                   },
                 ),
                 _buildIcon(
-                  icon: Icons.assignment_turned_in_rounded,
+                  icon: Icons.person,
                   onTap: () {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => InternalsPage(
-                          internals: internals,
+                        builder: (context) => DeveloperPage(
                           attendanceDetails: attendanceDetails,
                         ),
                       ),
@@ -75,15 +127,9 @@ class UtilTab extends StatelessWidget {
                   },
                 ),
                 _buildIcon(
+                  title: 'LogOut',
                   icon: Icons.logout_outlined,
-                  onTap: () async {
-                    await AuthServices.logout();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      (route) => false,
-                    );
-                  },
+                  onTap: () => _showAlertDialogForLogOut(context),
                 ),
               ],
             ),
@@ -93,7 +139,8 @@ class UtilTab extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon({required IconData icon, required VoidCallback onTap}) {
+  Widget _buildIcon(
+      {required IconData icon, required VoidCallback onTap, String? title}) {
     return InkWell(
       borderRadius: BorderRadius.circular(50),
       onTap: onTap,

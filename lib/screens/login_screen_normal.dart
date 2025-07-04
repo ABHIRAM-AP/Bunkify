@@ -1,3 +1,5 @@
+import 'package:attendance/screens/animation_screen.dart';
+import 'package:attendance/widgets/background_widget.dart';
 import 'package:attendance/widgets/login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool _isLoadingAnimationScreen = false;
   late final TextEditingController etlabidController;
   late final TextEditingController passwordController;
 
@@ -34,6 +37,29 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  void showAnimationScreen() {
+    _isLoadingAnimationScreen = true;
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withValues(alpha: 0.85),
+      transitionDuration: Duration(milliseconds: 200),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: AnimationScreen(),
+        );
+      },
+    );
+  }
+
+  void hideAnimationScreen() {
+    if (_isLoadingAnimationScreen && mounted) {
+      Navigator.of(context).pop();
+      _isLoadingAnimationScreen = false;
+    }
+  }
+
   Future<void> _checkSavedCredentials() async {
     final savedCred = await APISERVICES.getStoredCredentials();
     if (savedCred != null) {
@@ -42,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Delay navigation until after the first frame
       WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showAnimationScreen();
         await loginAndNavigate(userID, password);
       });
     }
@@ -57,46 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> loginAndNavigate(String userID, String password) async {
-    final data = await APISERVICES.sendLoginRequest(userID, password);
-
-    final attendance = data?['attendance'];
-    final headers = attendance?['headers'];
-    final rows = attendance?['data'];
-    final internals = data?['internal_marks'];
-
-    if (headers != null &&
-        headers.isNotEmpty &&
-        rows != null &&
-        rows.isNotEmpty) {
-      await APISERVICES.saveCredentials(userID, password);
-      debugPrint("Fetched Data: $data");
-
-      // Save data locally
-      await AuthServices.storeData(data!);
-
-      if (mounted) {
-        // Navigator.of(context).pop(); // Close loading screen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(
-              attendanceData: attendance,
-              internals: internals ?? [],
-            ),
-          ),
-        );
-      }
-    } else {
-      if (mounted) Navigator.of(context).pop(); // Close loading screen
-      showSnackBar("Invalid Credentials");
-    }
-
-    debugPrint("Headers: $headers");
-    debugPrint("Rows: $rows");
-    debugPrint("Internals: $internals");
-  }
-
   Future<void> loginUser() async {
     final userID = etlabidController.text.trim();
     final password = passwordController.text.trim();
@@ -105,13 +92,47 @@ class _LoginScreenState extends State<LoginScreen> {
       showSnackBar("ID and password cannot be empty.");
       return;
     }
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
-    );
-
+    showAnimationScreen();
     await loginAndNavigate(userID, password);
+  }
+
+  Future<void> loginAndNavigate(String userID, String password) async {
+    try {
+      final data = await APISERVICES.sendLoginRequest(userID, password);
+
+      final attendance = data?['attendance'];
+      final headers = attendance?['title'];
+      final rows = attendance?['data'];
+
+      if (headers != null &&
+          headers.isNotEmpty &&
+          rows != null &&
+          rows.isNotEmpty) {
+        await APISERVICES.saveCredentials(userID, password);
+        debugPrint("Fetched Data: $data");
+
+        // Save data locally
+        await AuthServices.storeData(data!);
+
+        if (mounted) {
+          hideAnimationScreen();
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                attendanceData: attendance,
+              ),
+            ),
+          );
+        }
+      } else {
+        if (mounted) Navigator.of(context).pop(); // Close loading screen
+        showSnackBar("Invalid Credentials");
+      }
+    } catch (e) {
+      showSnackBar(e.toString());
+    }
   }
 
   @override
@@ -121,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           // Background image
-          _buildBackgroundImage(),
+          BackgroundWidget(),
           Center(
             child: SingleChildScrollView(
               child: Column(
@@ -180,17 +201,6 @@ Widget _buildText(String title, double? fontSize, Color? color,
       color: color,
       fontWeight: fontWeight,
       letterSpacing: letterSpacing,
-    ),
-  );
-}
-
-Widget _buildBackgroundImage() {
-  return Container(
-    decoration: const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/image.png'),
-        fit: BoxFit.fill,
-      ),
     ),
   );
 }
