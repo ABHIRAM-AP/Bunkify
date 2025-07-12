@@ -69,7 +69,8 @@ class _TimeTablePageState extends State<TimeTablePage> {
                         color: Colors.transparent,
                         surfaceTintColor: const Color(0xFFE1E1E1),
                         elevation: 4,
-                        margin: const EdgeInsets.symmetric(horizontal: 21),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
