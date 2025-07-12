@@ -1,3 +1,5 @@
+/* This File is used to represent the attendance circular progress widget*/
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

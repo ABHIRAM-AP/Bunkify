@@ -1,5 +1,8 @@
+/* This File is used to display the Util Tab which contains icons & methods for home,timetable,developer page and for logout*/
+
 import 'dart:ui';
 import 'package:attendance/screens/developer_page.dart';
+import 'package:attendance/screens/time_table_page.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/screens/home_screen.dart';
 import 'package:attendance/screens/login_screen_normal.dart';
@@ -8,10 +11,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class UtilTab extends StatelessWidget {
   final Map<String, dynamic> attendanceDetails;
+  final Map<String, dynamic> subjectsDetails;
 
   const UtilTab({
     super.key,
     required this.attendanceDetails,
+    required this.subjectsDetails,
   });
   void _showAlertDialogForLogOut(BuildContext context) {
     showDialog(
@@ -108,10 +113,24 @@ class UtilTab extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => HomeScreen(
                           attendanceData: attendanceDetails,
+                          subjectsData: subjectsDetails,
                         ),
                       ),
                     );
                   },
+                ),
+                _buildIcon(
+                  title: 'Time Table',
+                  icon: Icons.menu_book,
+                  onTap: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TimeTablePage(
+                        attendanceDetails: attendanceDetails,
+                        subjectsDetails: subjectsDetails,
+                      ),
+                    ),
+                  ),
                 ),
                 _buildIcon(
                   icon: Icons.person,
@@ -121,6 +140,7 @@ class UtilTab extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => DeveloperPage(
                           attendanceDetails: attendanceDetails,
+                          subjectsDetails: subjectsDetails,
                         ),
                       ),
                     );

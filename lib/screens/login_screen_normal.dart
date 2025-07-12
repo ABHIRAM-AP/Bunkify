@@ -1,3 +1,5 @@
+/* This File is used to display the Login Screen*/
+
 import 'package:attendance/screens/animation_screen.dart';
 import 'package:attendance/widgets/background_widget.dart';
 import 'package:attendance/widgets/login_button.dart';
@@ -5,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:attendance/services/auth_services.dart';
 import 'package:attendance/screens/home_screen.dart';
-
 import 'package:attendance/widgets/etlab_id_textfield.dart';
 import 'package:attendance/widgets/password_textfield.dart';
 import 'package:attendance/api_services/login_request.dart';
@@ -19,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _isLoadingAnimationScreen = false;
+
   late final TextEditingController etlabidController;
   late final TextEditingController passwordController;
 
@@ -42,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withValues(alpha: 0.85),
+      barrierColor: Colors.black.withAlpha(220),
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
         return Scaffold(
@@ -66,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
       final userID = savedCred['userID']!;
       final password = savedCred['password']!;
 
-      // Delay navigation until after the first frame
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         showAnimationScreen();
         await loginAndNavigate(userID, password);
@@ -92,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
       showSnackBar("ID and password cannot be empty.");
       return;
     }
+
     showAnimationScreen();
     await loginAndNavigate(userID, password);
   }
@@ -103,6 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final attendance = data?['attendance'];
       final headers = attendance?['title'];
       final rows = attendance?['data'];
+      final subjects = data?['subjects'];
 
       if (headers != null &&
           headers.isNotEmpty &&
@@ -111,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
         await APISERVICES.saveCredentials(userID, password);
         debugPrint("Fetched Data: $data");
 
-        // Save data locally
         await AuthServices.storeData(data!);
 
         if (mounted) {
@@ -122,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
             MaterialPageRoute(
               builder: (context) => HomeScreen(
                 attendanceData: attendance,
+                subjectsData: subjects,
               ),
             ),
           );
@@ -137,11 +140,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // Background image
           BackgroundWidget(),
           Center(
             child: SingleChildScrollView(
@@ -149,15 +154,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildText(
-                    "BUNKIFY",
-                    48,
-                    Colors.white,
-                    FontWeight.w800,
-                    null,
-                  ),
-
+                      "BUNKIFY", 48, Colors.white, FontWeight.w800, null),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 20),
+                    padding: EdgeInsets.only(
+                      top: screenHeight * 0.01,
+                      bottom: screenHeight * 0.025,
+                    ),
                     child: _buildText(
                       "Hey There Let's have a Tea :)",
                       13,
@@ -167,7 +169,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 40.0, bottom: 18),
+                    padding: EdgeInsets.only(
+                      left: screenWidth * 0.1,
+                      bottom: screenHeight * 0.02,
+                    ),
                     child: Row(
                       children: [
                         _buildText(
@@ -175,13 +180,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  EtlabID(
-                      etlabidController: etlabidController), //Etlab Textfield
-                  PasswordTextfield(
-                      passwordController:
-                          passwordController), // Password Textfield
-                  const SizedBox(height: 35),
-                  LoginButton(loginUser: loginUser), // Login Button
+                  EtlabID(etlabidController: etlabidController),
+                  PasswordTextfield(passwordController: passwordController),
+                  SizedBox(height: screenHeight * 0.045),
+                  LoginButton(loginUser: loginUser),
                 ],
               ),
             ),

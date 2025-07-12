@@ -1,3 +1,8 @@
+/*
+This file contains class and methods for calculating required attendance for skipping and to get required attendance percentage
+
+*/
+
 class AttendanceHelper {
   static int skippableClasses(int attended, int total, double requiredPercent) {
     double x = (attended - (requiredPercent * total)) / requiredPercent;

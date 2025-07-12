@@ -1,3 +1,7 @@
+/* This File is used to display the Attendance Details by using helper methods for skipping etc
+  Its the core of the app.
+*/
+
 import 'package:attendance/widgets/customAppBar.dart';
 import 'package:attendance/widgets/attendance_progess.dart';
 import 'package:attendance/widgets/background_widget.dart';
@@ -8,10 +12,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic> attendanceData;
+  final Map<String, dynamic> subjectsData;
 
   const HomeScreen({
     super.key,
     required this.attendanceData,
+    required this.subjectsData,
   });
 
   @override
@@ -69,6 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -80,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(
-                top: 100,
+                top: screenHeight * 0.12,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 70,
               ),
               child: Column(
@@ -88,13 +96,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   _totalAttendancePercentageCard(), // Total Attendance Percentage
                   _attendancePercentageDropdown(), // [ 90, 80, 75 ]
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: screenHeight * 0.025),
                   ...attendanceDetails.map(
                     (item) =>
                         SubjectCard(item: item, selectedValue: selectedValue),
                   ), // Builds each Subject Attendance data
+                  SizedBox(
+                    height: MediaQuery.of(context).viewInsets.bottom + 50,
+                  )
                 ],
               ),
             ),
@@ -104,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: SafeArea(
         child: UtilTab(
           attendanceDetails: widget.attendanceData,
+          subjectsDetails: widget.subjectsData,
         ),
       ),
     );
@@ -114,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          height: 100,
+          height: MediaQuery.of(context).size.height * 0.13,
           width: MediaQuery.of(context).size.width - 20,
           child: Card(
             color: Colors.transparent,

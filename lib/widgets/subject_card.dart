@@ -1,3 +1,5 @@
+/* This File is used to display the Subjects and all their attendance details*/
+
 import 'package:attendance/utils/attendance_helper.dart';
 import 'package:attendance/widgets/attendance_progess.dart';
 import 'package:flutter/material.dart';

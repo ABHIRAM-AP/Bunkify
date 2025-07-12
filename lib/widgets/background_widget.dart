@@ -1,3 +1,5 @@
+/* This File is used to display the background image*/
+
 import 'package:flutter/material.dart';
 
 class BackgroundWidget extends StatelessWidget {

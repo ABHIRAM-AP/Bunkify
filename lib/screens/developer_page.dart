@@ -1,20 +1,42 @@
+/* This File is used to display the details of app and about the developer(Myself)*/
+
 import 'package:attendance/screens/home_screen.dart';
 import 'package:attendance/widgets/background_widget.dart';
 import 'package:attendance/widgets/customAppBar.dart';
 import 'package:attendance/widgets/util_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DeveloperPage extends StatefulWidget {
   final Map<String, dynamic> attendanceDetails;
-  const DeveloperPage({super.key, required this.attendanceDetails});
+  final Map<String, dynamic> subjectsDetails;
+  const DeveloperPage(
+      {super.key,
+      required this.attendanceDetails,
+      required this.subjectsDetails});
 
   @override
   State<DeveloperPage> createState() => _DeveloperPageState();
 }
 
 class _DeveloperPageState extends State<DeveloperPage> {
-  String appVersion = '';
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    try {
+      final launched = await launchUrl(uri);
+      if (!launched) {
+        throw "Could not launch $url";
+      }
+    } catch (e) {
+      debugPrint("Launch error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
+  }
+
+  String appVersion = '1.0.0';
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +49,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
           MaterialPageRoute(
             builder: (context) => HomeScreen(
               attendanceData: widget.attendanceDetails,
+              subjectsData: widget.subjectsDetails,
             ),
           ),
         );
@@ -34,55 +57,129 @@ class _DeveloperPageState extends State<DeveloperPage> {
       body: Stack(
         children: [
           BackgroundWidget(),
-          Center(
+          SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).viewInsets.top + 100,
+                left: MediaQuery.of(context).viewInsets.left + 12,
+              ),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CircleAvatar(
-                    radius: 60,
-                    // backgroundImage: AssetImage('assets/abhiram.jpg'), // your photo
-                  ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.06),
                   Text(
-                    "Abhiram A P",
+                    "📱 About the App",
                     style: GoogleFonts.poppins(
-                      fontSize: 29,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white70,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.008),
                   Text(
-                    "\"Tech fuels my passion beyond what any self-proclaimed tech enthusiast could understand.\"",
-                    textAlign: TextAlign.center,
+                    "This app helps students track attendance and visualize subject-wise details efficiently.",
                     style: GoogleFonts.poppins(
                       fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white70,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                  Text(
+                    "🚫 Disclaimer",
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.008),
+                  Text(
+                    "Bunkify does not promote or endorse class bunking. Students must take responsiblity for their actions.",
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                  Text(
+                    "Developed by Abhiram A P\n\nFollow Here :)",
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // IconButton(
-                      //   icon: const Icon(Icons.link),
-                      //   onPressed: () => _launchURL('https://github.com/abhiram-ap'),
-                      // ),
-                      // IconButton(
-                      //   icon: const Icon(Icons.email),
-                      //   onPressed: () => _launchURL('mailto:abhiram@example.com'),
-                      // ),
-                      // IconButton(
-                      //   icon: const Icon(Icons.account_box),
-                      //   onPressed: () => _launchURL('https://linkedin.com/in/abhiram-ap'),
-                      // ),
+                      //Linkedin
+                      GestureDetector(
+                        onTap: () async {
+                          try {
+                            await _launchURL(
+                                "https://www.linkedin.com/in/abhiram-a-p-980044284/");
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Failed to launch link")),
+                            );
+                          }
+                        },
+                        child: ImageIcon(
+                          AssetImage("assets/linkedin-2.png"),
+                          color: Colors.white,
+                          size: 43,
+                        ),
+                      ),
+                      //GitHub
+                      GestureDetector(
+                        onTap: () async {
+                          try {
+                            await _launchURL("https://github.com/ABHIRAM-AP");
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Failed to launch link")),
+                            );
+                          }
+                        },
+                        child: ImageIcon(
+                          AssetImage("assets/github.png"),
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                      //Instagram
+                      GestureDetector(
+                        onTap: () async {
+                          try {
+                            await _launchURL(
+                                "https://www.instagram.com/abhii0305/");
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Failed to launch link")),
+                            );
+                          }
+                        },
+                        child: ImageIcon(
+                          AssetImage("assets/insta.png"),
+                          size: 43,
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  Text("App Version: $appVersion"),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                  Text(
+                    "App Version: $appVersion",
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 ],
               ),
             ),
@@ -90,7 +187,10 @@ class _DeveloperPageState extends State<DeveloperPage> {
         ],
       ),
       bottomNavigationBar: SafeArea(
-        child: UtilTab(attendanceDetails: widget.attendanceDetails),
+        child: UtilTab(
+          attendanceDetails: widget.attendanceDetails,
+          subjectsDetails: widget.subjectsDetails,
+        ),
       ),
     );
   }

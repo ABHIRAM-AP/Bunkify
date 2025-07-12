@@ -1,3 +1,7 @@
+/*  
+This file contains functions and class for sending login request to backend(render), saving and retreiving the stored credentials like userID, password
+*/
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -43,7 +47,6 @@ class APISERVICES {
   }
 
   // Retrieve stored credentials from SharedPreferences
-
   static Future<Map<String, String>?> getStoredCredentials() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? userID = pref.getString('userID');
