@@ -88,7 +88,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                             subtitle: Text(
                               subjectName,
                               style: GoogleFonts.poppins(
-                                fontSize: 12,
+                                fontSize: 12.5,
                                 color: Colors.white70,
                               ),
                             ),
