@@ -2,22 +2,30 @@
 
 import 'dart:ui';
 import 'package:attendance/screens/developer_page.dart';
-import 'package:attendance/screens/time_table_page.dart';
+import 'package:attendance/screens/subjects_page.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/screens/home_screen.dart';
 import 'package:attendance/screens/login_screen_normal.dart';
 import 'package:attendance/services/auth_services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UtilTab extends StatelessWidget {
+class UtilTab extends StatefulWidget {
   final Map<String, dynamic> attendanceDetails;
   final Map<String, dynamic> subjectsDetails;
+  final int selectedIndex;
 
   const UtilTab({
     super.key,
     required this.attendanceDetails,
     required this.subjectsDetails,
+    this.selectedIndex = 0,
   });
+
+  @override
+  State<UtilTab> createState() => _UtilTabState();
+}
+
+class _UtilTabState extends State<UtilTab> {
   void _showAlertDialogForLogOut(BuildContext context) {
     showDialog(
       context: context,
@@ -107,49 +115,55 @@ class UtilTab extends StatelessWidget {
               children: [
                 _buildIcon(
                   icon: Icons.home_outlined,
+                  isSelected: widget.selectedIndex == 0,
                   onTap: () {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => HomeScreen(
-                          attendanceData: attendanceDetails,
-                          subjectsData: subjectsDetails,
+                          attendanceData: widget.attendanceDetails,
+                          subjectsData: widget.subjectsDetails,
                         ),
                       ),
                     );
                   },
                 ),
                 _buildIcon(
-                  title: 'Time Table',
                   icon: Icons.menu_book,
-                  onTap: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TimeTablePage(
-                        attendanceDetails: attendanceDetails,
-                        subjectsDetails: subjectsDetails,
+                  isSelected: widget.selectedIndex == 1,
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SubjectsPage(
+                          attendanceDetails: widget.attendanceDetails,
+                          subjectsDetails: widget.subjectsDetails,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
                 _buildIcon(
                   icon: Icons.person,
+                  isSelected: widget.selectedIndex == 2,
                   onTap: () {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DeveloperPage(
-                          attendanceDetails: attendanceDetails,
-                          subjectsDetails: subjectsDetails,
+                          attendanceDetails: widget.attendanceDetails,
+                          subjectsDetails: widget.subjectsDetails,
                         ),
                       ),
                     );
                   },
                 ),
                 _buildIcon(
-                  title: 'LogOut',
                   icon: Icons.logout_outlined,
-                  onTap: () => _showAlertDialogForLogOut(context),
+                  isSelected: widget.selectedIndex == 3,
+                  onTap: () {
+                    _showAlertDialogForLogOut(context);
+                  },
                 ),
               ],
             ),
@@ -159,20 +173,29 @@ class UtilTab extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon(
-      {required IconData icon, required VoidCallback onTap, String? title}) {
+  Widget _buildIcon({
+    required IconData icon,
+    required VoidCallback onTap,
+    required bool isSelected,
+  }) {
     return InkWell(
       borderRadius: BorderRadius.circular(50),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(10),
+        width: 48,
+        height: 48,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.08),
+          color: isSelected
+              ? Colors.yellow.withAlpha(2)
+              : Colors.white.withValues(alpha: 0.08),
           shape: BoxShape.circle,
+          border:
+              isSelected ? Border.all(color: Colors.yellow, width: 2) : null,
         ),
         child: Icon(
           icon,
-          color: Colors.white,
+          color: isSelected ? Colors.yellow : Colors.white,
           size: 26,
         ),
       ),

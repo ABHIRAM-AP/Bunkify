@@ -7,20 +7,20 @@ import 'package:attendance/widgets/util_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TimeTablePage extends StatefulWidget {
+class SubjectsPage extends StatefulWidget {
   final Map<String, dynamic> attendanceDetails;
   final Map<String, dynamic> subjectsDetails;
-  const TimeTablePage({
+  const SubjectsPage({
     super.key,
     required this.attendanceDetails,
     required this.subjectsDetails,
   });
 
   @override
-  State<TimeTablePage> createState() => _TimeTablePageState();
+  State<SubjectsPage> createState() => _SubjectsPageState();
 }
 
-class _TimeTablePageState extends State<TimeTablePage> {
+class _SubjectsPageState extends State<SubjectsPage> {
   @override
   void initState() {
     super.initState();
@@ -64,18 +64,20 @@ class _TimeTablePageState extends State<TimeTablePage> {
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
+                          horizontal: 20.0, vertical: 6.0),
                       child: Card(
                         color: Colors.transparent,
                         surfaceTintColor: const Color(0xFFE1E1E1),
                         elevation: 4,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 9),
+                        margin:
+                            const EdgeInsets.only(left: 20, right: 20, top: 9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 16, bottom: 10),
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                          ),
                           child: ListTile(
                             title: Text(
                               subjectCode,
@@ -107,6 +109,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
         child: UtilTab(
           attendanceDetails: widget.attendanceDetails,
           subjectsDetails: widget.subjectsDetails,
+          selectedIndex: 1,
         ),
       ),
     );

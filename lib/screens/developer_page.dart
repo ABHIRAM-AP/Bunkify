@@ -190,6 +190,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
         child: UtilTab(
           attendanceDetails: widget.attendanceDetails,
           subjectsDetails: widget.subjectsDetails,
+          selectedIndex: 2,
         ),
       ),
     );

@@ -114,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: UtilTab(
           attendanceDetails: widget.attendanceData,
           subjectsDetails: widget.subjectsData,
+          selectedIndex: 0,
         ),
       ),
     );
@@ -138,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 23),
               title: Text(
-                "Total Attendance Percentage",
+                "Total",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
