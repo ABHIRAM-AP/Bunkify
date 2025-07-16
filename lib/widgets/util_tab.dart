@@ -91,7 +91,7 @@ class _UtilTabState extends State<UtilTab> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1.2, sigmaY: 1.2),
+          filter: ImageFilter.blur(sigmaX: 1.6, sigmaY: 1.6),
           child: Container(
             height: 65,
             decoration: BoxDecoration(
@@ -190,12 +190,13 @@ class _UtilTabState extends State<UtilTab> {
               ? Colors.yellow.withAlpha(2)
               : Colors.white.withValues(alpha: 0.08),
           shape: BoxShape.circle,
-          border:
-              isSelected ? Border.all(color: Colors.yellow, width: 2) : null,
+          border: isSelected
+              ? Border.all(color: const Color(0xFFBB6E68), width: 1.8)
+              : null,
         ),
         child: Icon(
           icon,
-          color: isSelected ? Colors.yellow : Colors.white,
+          color: Colors.white,
           size: 26,
         ),
       ),
