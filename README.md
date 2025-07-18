@@ -13,9 +13,8 @@
 
 ---
 
-## 📸 Screenshots
-
-*Coming soon...*
+## Screens
+<img src="assets/readmeAssets/animation.jpg" height=400>    <img src="assets/readmeAssets/login.jpg" height=400>    <img src="assets/readmeAssets/attendance1.jpg" height=400>   <img src="assets/readmeAssets/attendance2.jpg" height=400>   <img src="assets/readmeAssets/subjects.jpg" height=400>       <img src="assets/readmeAssets/developer.jpg" height=400> <img src="assets/readmeAssets/logout.jpg" height=400>
 
 ---
 
