@@ -72,7 +72,7 @@ If you face any issues or bugs while using Bunkify, feel free to raise an [issue
 
 ---
 
-## 🤝 Contributing
+## Contributing
 Want to help improve Bunkify? You're welcome to contribute:
 
 - Fork the repo
