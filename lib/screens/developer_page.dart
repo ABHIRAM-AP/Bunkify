@@ -116,58 +116,16 @@ class _DeveloperPageState extends State<DeveloperPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       //Linkedin
-                      GestureDetector(
-                        onTap: () async {
-                          try {
-                            await _launchURL(
-                                "https://www.linkedin.com/in/abhiram-a-p-980044284/");
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Failed to launch link")),
-                            );
-                          }
-                        },
-                        child: ImageIcon(
-                          AssetImage("assets/linkedin-2.png"),
-                          color: Colors.white,
-                          size: 43,
-                        ),
-                      ),
+                      _buildGestureDetector("assets/linkedin-2.png",
+                          "https://www.linkedin.com/in/abhiram-a-p-980044284/"),
+
                       //GitHub
-                      GestureDetector(
-                        onTap: () async {
-                          try {
-                            await _launchURL("https://github.com/ABHIRAM-AP");
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Failed to launch link")),
-                            );
-                          }
-                        },
-                        child: ImageIcon(
-                          AssetImage("assets/github.png"),
-                          size: 40,
-                          color: Colors.white,
-                        ),
-                      ),
+                      _buildGestureDetector(
+                          "assets/github.png", "https://github.com/ABHIRAM-AP"),
+
                       //Instagram
-                      GestureDetector(
-                        onTap: () async {
-                          try {
-                            await _launchURL(
-                                "https://www.instagram.com/abhii0305/");
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Failed to launch link")),
-                            );
-                          }
-                        },
-                        child: ImageIcon(
-                          AssetImage("assets/insta.png"),
-                          size: 43,
-                          color: Colors.white,
-                        ),
-                      ),
+                      _buildGestureDetector("assets/insta.png",
+                          "https://www.instagram.com/abhii0305/"),
                     ],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
@@ -192,6 +150,25 @@ class _DeveloperPageState extends State<DeveloperPage> {
           subjectsDetails: widget.subjectsDetails,
           selectedIndex: 2,
         ),
+      ),
+    );
+  }
+
+  Widget _buildGestureDetector(String assetPath, String socialMediaPath) {
+    return GestureDetector(
+      onTap: () async {
+        try {
+          await _launchURL(socialMediaPath);
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to launch link")),
+          );
+        }
+      },
+      child: ImageIcon(
+        AssetImage(assetPath),
+        size: 43,
+        color: Colors.white,
       ),
     );
   }

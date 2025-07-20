@@ -22,15 +22,6 @@ class AnimationScreen extends StatelessWidget {
               ),
               child: AnimatedTextKit(
                 animatedTexts: [
-                  FadeAnimatedText(
-                    'BUNKIFY',
-                    duration: const Duration(milliseconds: 1000),
-                    textAlign: TextAlign.center,
-                  ),
-                  ScaleAnimatedText('BUNKIFY',
-                      duration: const Duration(milliseconds: 1000),
-                      scalingFactor: 0.2,
-                      textAlign: TextAlign.center),
                   TypewriterAnimatedText(
                     'BUNKIFY',
                     speed: const Duration(milliseconds: 150),
