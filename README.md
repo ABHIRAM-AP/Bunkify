@@ -1,13 +1,13 @@
 #  Bunkify
 
-<img src="assets/bunkify_icon.png" align="right" height="200">
+
 
 **Bunkify** is a smart attendance companion app that helps students strategically track their attendance and calculate how many classes they can safely bunk without dropping below their target threshold. Whether you're trying to maintain that 75% or push it further, Bunkify has got your back!
 
 ---
 
 ## GoTo:
-
+<img src="assets/bunkify_icon.png" align="right" height="200">
 - [Download](#download-bunkify)
   - [Requirements](#requirements)
 - [About](#about)
