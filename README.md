@@ -20,7 +20,7 @@
 
 ---
 
-## 📥 Download Bunkify
+### Download Bunkify
 Get the apk [here!](https://github.com/ABHIRAM-AP/Bunkify/releases/tag/bunkify_v1.0.0)
 
 ### Requirements
