@@ -1,7 +1,7 @@
 # 📱 Bunkify
 
 Bunkify is a smart attendance companion app built with Flutter. It helps students track their attendance and calculate how many classes they can safely bunk without falling below a set attendance threshold. Designed with simplicity and utility in mind, Bunkify is a must-have tool for strategic bunkers.
-<img src="assets/bunkify_icon.png" align=right height=200>
+<img src="assets/bunkify_icon.png" align=right height=150>
 
 ---
 
