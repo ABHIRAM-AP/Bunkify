@@ -91,7 +91,7 @@ class _UtilTabState extends State<UtilTab> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1.6, sigmaY: 1.6),
+          filter: ImageFilter.blur(sigmaX: 1.3, sigmaY: 1.3),
           child: Container(
             height: 65,
             decoration: BoxDecoration(
