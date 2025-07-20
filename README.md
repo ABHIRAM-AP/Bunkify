@@ -7,7 +7,7 @@
 ---
 
 ## GoTo:
-<img src="assets/bunkify_icon.png" align="right" height="200">
+
 - [Download](#download-bunkify)
   - [Requirements](#requirements)
 - [About](#about)
@@ -17,7 +17,7 @@
 - [Bugs and Issues](#bugs-and-issues)
 - [Contributing](#contributing)
 - [Supporting](#supporting)
-
+<img src="assets/bunkify_icon.png" align="right" height="200">
 ---
 
 ### Download Bunkify
