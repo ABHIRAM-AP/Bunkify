@@ -36,7 +36,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
     }
   }
 
-  String appVersion = '1.0.0';
+  String appVersion = '1.0.1';
 
   @override
   Widget build(BuildContext context) {

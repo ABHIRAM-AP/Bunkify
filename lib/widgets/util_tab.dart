@@ -33,9 +33,6 @@ class _UtilTabState extends State<UtilTab> {
         child: AlertDialog(
           elevation: 10,
           backgroundColor: const Color(0xFF2A2A2A),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadiusGeometry.circular(30),
-          ),
           actionsAlignment: MainAxisAlignment.spaceAround,
           title: Text(
             'Logout Confirmation',
