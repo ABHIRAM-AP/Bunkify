@@ -29,37 +29,40 @@ class _HomeScreenState extends State<HomeScreen> {
   double _totalAttendancePercentage = 0;
 
   void parseAttendanceData() {
-    List<String> headers = List<String>.from(widget.attendanceData['title']);
-    List<dynamic> rows = List<dynamic>.from(widget.attendanceData['data']);
-    _totalAttendancePercentage = double.tryParse(
-            widget.attendanceData['data'][12].toString().replaceAll('%', '')) ??
-        0;
+    final headers = List<String>.from(widget.attendanceData['title']);
+    final rows = List<dynamic>.from(widget.attendanceData['data']);
 
-    if (rows.isNotEmpty) {
-      List<Map<String, String>> parsedData = [];
+    final percentageIndex = headers.indexOf('Percentage');
+    _totalAttendancePercentage = percentageIndex != -1
+        ? double.tryParse(
+              rows[percentageIndex].toString().replaceAll('%', ''),
+            ) ??
+            0
+        : 0;
 
-      for (int i = 3; i < headers.length - 2; i++) {
-        String title = headers[i];
-        String value = rows[i];
+    List<Map<String, String>> parsedData = [];
 
-        String percentage = '';
-        String raw = value;
+    for (int i = 3; i < headers.length; i++) {
+      if (headers[i] == 'Total' || headers[i] == 'Percentage') break;
+      if (i >= rows.length) break;
 
-        if (value.contains('(') && value.contains('%')) {
-          percentage = value.split('(')[1].split('%')[0]; // just "98"
-        }
+      final value = rows[i].toString();
+      String percentage = '';
 
-        parsedData.add({
-          "title": title,
-          "value": percentage,
-          "raw": raw,
-        });
+      if (value.contains('(') && value.contains('%')) {
+        percentage = value.split('(')[1].split('%')[0];
       }
 
-      setState(() {
-        attendanceDetails = parsedData;
+      parsedData.add({
+        "title": headers[i],
+        "value": percentage,
+        "raw": value,
       });
     }
+
+    setState(() {
+      attendanceDetails = parsedData;
+    });
   }
 
   @override
